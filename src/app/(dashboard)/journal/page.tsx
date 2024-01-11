@@ -3,6 +3,7 @@ import { prisma } from '@/utils/db';
 import NewEntryCard from '@/components/NewEntryCard';
 import React from 'react';
 import EntryCard from '@/components/EntryCard';
+import Link from 'next/link';
 
 const getEntries = async () => {
   const user = await getUserByClerkId();
@@ -24,7 +25,11 @@ const JournalPage = async () => {
       <h2 className="text-3xl mb-8">Journal</h2>
       <div className="grid grid-cols-4 gap-4">
         <NewEntryCard />
-        {entries.map(entry => <EntryCard key={entry.id} entry={entry} />)}
+        {entries.map(entry => (
+          <Link href={`/journal/${entry.id}`} key={entry.id}>
+            <EntryCard key={entry.id} entry={entry} />
+          </Link>
+        ))}
       </div>
     </div>
   );
