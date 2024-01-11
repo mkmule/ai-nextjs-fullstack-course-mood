@@ -1,5 +1,8 @@
 import { getUserByClerkId } from '@/utils/auth';
 import { prisma } from '@/utils/db';
+import NewEntryCard from '@/components/NewEntryCard';
+import React from 'react';
+import EntryCard from '@/components/EntryCard';
 
 const getEntries = async () => {
   const user = await getUserByClerkId();
@@ -13,13 +16,18 @@ const getEntries = async () => {
   });
 };
 
-const Journal = async () => {
+const JournalPage = async () => {
   const entries = await getEntries();
-  console.log('entries', entries);
 
   return (
-    <div>This is journal</div>
+    <div className="p-10">
+      <h2 className="text-3xl mb-8">Journal</h2>
+      <div className="grid grid-cols-4 gap-4">
+        <NewEntryCard />
+        {entries.map(entry => <EntryCard key={entry.id} entry={entry} />)}
+      </div>
+    </div>
   );
 };
 
-export default Journal;
+export default JournalPage;
