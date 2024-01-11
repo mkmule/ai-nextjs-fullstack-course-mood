@@ -14,5 +14,19 @@ export const createNewEntry = async () => {
     return data.data;
   }
 
-  throw new Error('TODO: Implement error handling');
+  throw { error: true, code: 777, displayMessage: 'Error on createNewEntry' };
+};
+
+export const updateEntry = async (id: string, content: string) => {
+  const res = await fetch(new Request(createURL(`/api/journal/${id}`)), {
+    method: 'PATCH',
+    body: JSON.stringify({ content }),
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    return data.data;
+  }
+
+  throw { error: true, code: 777, displayMessage: 'Error on updateEntry' };
 };
