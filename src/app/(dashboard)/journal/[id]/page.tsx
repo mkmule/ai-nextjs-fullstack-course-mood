@@ -2,27 +2,30 @@ import { getUserByClerkId } from '@/utils/auth';
 import { prisma } from '@/utils/db';
 import Editor from '@/components/Editor';
 
-const getEntry = async (id: string) => {
+const getEntry = async (id: string): Promise<any> => {
   const user = await getUserByClerkId();
-  const entry = prisma.journalEntry.findUnique({
+  return prisma.journalEntry.findUnique({
     where: {
       userId_id: {
         userId: user.id,
         id,
       },
     },
+    include: {
+      analysis: true,
+    },
   });
-
-  return entry;
 };
 
 const EntryPage = async ({ params }: any) => {
   const entry = await getEntry(params.id);
+
+  const { mood, summary, color, subject, negative } = entry.analysis;
   const analysisData = [
-    { name: 'Subject', value: 'String for now' },
-    { name: 'Summary', value: '' },
-    { name: 'Mood', value: '' },
-    { name: 'Negative', value: false },
+    { name: 'Subject', value: subject },
+    { name: 'Summary', value: summary },
+    { name: 'Mood', value: mood },
+    { name: 'Negative', value: negative ? 'Yes' : 'No' },
   ];
 
   return (
@@ -31,7 +34,7 @@ const EntryPage = async ({ params }: any) => {
         <Editor entry={entry} />
       </div>
       <div className="border-l border-black/10">
-        <div className="bg-blue-300 px-6 py-10">
+        <div className="px-6 py-10" style={{ backgroundColor: color }}>
           <h2 className="text-2xl">Analysis</h2>
         </div>
         <div>
