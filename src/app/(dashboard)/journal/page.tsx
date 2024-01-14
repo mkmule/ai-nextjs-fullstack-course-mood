@@ -5,17 +5,24 @@ import React from 'react';
 import EntryCard from '@/components/EntryCard';
 import Link from 'next/link';
 import Question from '@/components/Question';
+import { revalidatePath } from 'next/cache';
 
 const getEntries = async () => {
   const user = await getUserByClerkId();
-  return prisma.journalEntry.findMany({
+  const entries = prisma.journalEntry.findMany({
     where: {
       userId: user.id,
     },
     orderBy: {
       createdAt: 'desc',
     },
+    include: {
+      analysis: true,
+    },
   });
+
+  revalidatePath('/journal');
+  return entries;
 };
 
 const JournalPage = async () => {
