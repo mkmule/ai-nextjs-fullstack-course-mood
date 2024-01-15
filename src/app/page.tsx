@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { auth } from '@clerk/nextjs';
 
 
-export default function Home() {
+export default function HomePage() {
 
   const { userId } = auth();
   let href = userId ? '/journal' : '/new-user';
