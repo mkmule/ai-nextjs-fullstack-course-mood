@@ -26,6 +26,7 @@ export const PATCH = async (request: Request, { params }: any) => {
     },
     // @ts-ignore
     create: {
+      userId: user.id,
       entryId: updatedEntry.id,
       ...analysis,
     },
